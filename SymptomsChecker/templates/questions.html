@@ -1,0 +1,19 @@
+{% extends 'nav.html' %}
+
+{% block content %}
+<h3>Please tell us more</h3>
+<form method="POST" action="/process-input" style = "margin-top: 30px; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+    {% csrf_token %}
+    <label for="text-input" >Current Medications <small style = "font-size: 14px; color: grey; ">(Optional)</small><br><small style = "font-size: 12px; color: grey; ">Only some medications are factored into results.</small></label>
+    <input type="text" placeholder="E.g. Paracitamol" class="form-control" id="text-input" name="text-input" style = "width: 400px;" required>
+    <br>
+    <label for="text-input" >Past or Current Conditions <small style = "font-size: 14px; color: grey; ">(Optional)</small><br><small style = "font-size: 12px; color: grey; ">Only some conditions are factored into results.</small></label>
+    <input type="text" placeholder="E.g. Arthrithis" class="form-control" id="text-input" name="text-input" style = "width: 400px;" required>
+<div>
+    <br>
+    <a href="/basic_info" id="Continue" class="btn-get-started scrollto">< Previous</a>
+    <a href="/questions" id="Continue" class="btn-get-started scrollto" style = "margin-left: 40px;">Continue ></a>
+</div>
+</form>
+{% endblock content %}
+

@@ -1,0 +1,35 @@
+{% extends 'nav.html' %}
+
+{% block content %}
+<div>
+<h1>SymptoScan</h1>
+    <h2>
+        Identify possible conditions and treatment related to your symptoms.
+    </h2>
+    <form method="POST" action="/process-age">
+        {% csrf_token %}
+        <br>
+        <label for="age">Age:</label>
+        <input type="number" min = "1" id="age" name="age" required>
+        <br>
+        <br>
+        <div id = "radio-gender">
+            <input type="radio" id="male" name="gender" value="male" required>
+            <label for="male">Male</label>
+            
+            <input type="radio" id="female" name="gender" value="female" required style = "margin-left: 30px;">
+            <label for="female">Female</label>
+        </div>
+        <a href="/symptoms" id="Continue" class="btn-get-started scrollto">Continue ></a>
+    </form>
+</div>
+{% endblock content %}
+
+{% block style %}
+#radio-gender {
+    display: flex;
+    gap: 5px; 
+    justify-content: center;
+    align-item: center;
+  }
+{% endblock style %}
