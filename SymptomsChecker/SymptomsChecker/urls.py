@@ -24,4 +24,10 @@ urlpatterns = [
     path('basic_info/', views.basic_info, name = 'basic_info'),
     path('symptoms/', views.symptoms, name = 'symptoms'),
     path('questions/', views.questions, name = 'questions'),
+    path('conditions/', views.conditions, name = 'conditions'),
+    path('details/', views.details, name = 'details'),
+    path('treatment/', views.treatment, name = 'treatment'),
+    path('basic_info/get_basic_info/', views.get_basic_info, name = 'get_basic_info'),
+    path('symptoms/get_symptoms/', views.get_symptoms, name = 'get_symptoms'),
+    path('questions/get_other_info/', views.get_other_info, name = 'get_other_info'),
 ]

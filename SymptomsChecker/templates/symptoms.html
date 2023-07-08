@@ -2,8 +2,10 @@
 {% load static %}
 {% block content %}
     <h3>What are your symptoms?</h3>
-    <div class="type-ahead" no-result-text="Sorry, no results." style = "margin-top: 30px; display: flex; justify-content: center; align-items: center;">
-        <input type="text" placeholder="Type your main symptom here" style = "width: 400px;" title="" autocomplete="off" class="form-control type-ahead-select taller">
+    <form method="POST" action="get_symptoms/">
+        {% csrf_token %}
+    <div class="type-ahead form-group" no-result-text="Sorry, no results." style = "margin-top: 30px; display: flex; justify-content: center; align-items: center;">
+        <input type="text" name = "symptoms" placeholder="Type your main symptom here" style = "width: 450px;" title="" autocomplete="off" class="form-control type-ahead-select taller">
         <!---->
         <ul role="menu" aria-labelledby="dropdownMenu" class="dropdown-menu-list dropdown-menu" id="resultContainer" style="display: none;">
             <li class="typeahead-message"> Can't find your symptom? Only some symptoms are factored into results. </li>
@@ -12,8 +14,9 @@
     <div>
         <br>
         <a href="/basic_info" id="Continue" class="btn-get-started scrollto">< Previous</a>
-        <a href="/questions" id="Continue" class="btn-get-started scrollto" style = "margin-left: 40px;">Continue ></a>
+        <button type = "submit" id="Continue" class="btn-get-started scrollto" style = "margin-left: 40px; border: none;">Continue ></button>
     </div>
+</form>
 {% endblock content %}
 
 {% block style %}

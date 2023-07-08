@@ -6,21 +6,22 @@
     <h2>
         Identify possible conditions and treatment related to your symptoms.
     </h2>
-    <form method="POST" action="/process-age">
+    <form method="POST" action="get_basic_info/">
         {% csrf_token %}
         <br>
-        <label for="age">Age:</label>
-        <input type="number" min = "1" id="age" name="age" required>
+        <div class="form-group" style = "display: flex; justify-content: center; align-items: center; flex-direction: column;">
+        <label for="age">Age</label>
+        <input type="number" min="1" class="form-control" id="age" name="age" required style = "width: 450px; margin-top: 5px;">
+        </div>
         <br>
-        <br>
-        <div id = "radio-gender">
+        <div id = "radio-gender" class="form-group">
             <input type="radio" id="male" name="gender" value="male" required>
             <label for="male">Male</label>
             
             <input type="radio" id="female" name="gender" value="female" required style = "margin-left: 30px;">
             <label for="female">Female</label>
         </div>
-        <a href="/symptoms" id="Continue" class="btn-get-started scrollto">Continue ></a>
+        <button type="submit" id="Continue" class="btn-get-started scrollto" style = "border: none;">Continue ></button>
     </form>
 </div>
 {% endblock content %}
