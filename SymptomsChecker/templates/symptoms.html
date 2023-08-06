@@ -4,26 +4,89 @@
     <h3>What are your symptoms?</h3>
     <form method="POST" action="get_symptoms/">
         {% csrf_token %}
-    <div class="type-ahead form-group" no-result-text="Sorry, no results." style = "margin-top: 30px; display: flex; justify-content: center; align-items: center;">
-        <input type="text" name = "symptoms" placeholder="Type your main symptom here" style = "width: 450px;" title="" autocomplete="off" class="form-control type-ahead-select taller">
-        <!---->
-        <ul role="menu" aria-labelledby="dropdownMenu" class="dropdown-menu-list dropdown-menu" id="resultContainer" style="display: none;">
-            <li class="typeahead-message"> Can't find your symptom? Only some symptoms are factored into results. </li>
-        </ul><!---->
-    </div>
+        <div style="margin-top: 30px; display: flex; justify-content: center; align-items: center; position: relative;">
+            <input
+              type="text"
+              class = "form-control"
+              name="symptoms"
+              id="symptomsInput"
+              placeholder="Type your main symptom here"
+              style="width: 450px;"
+              title=""
+              autocomplete="off"
+            >
+            <div id="autocomplete" style="display: none; position: absolute; cursor: pointer; top: 100%; left: 50%; transform: translate(-50%, 0); width: 450px; max-height: 150px; overflow-y: auto; background-color: #f1f1f1; border: 1px solid #d4d4d4; border-top: none;"></div>
+          </div>
     <div>
         <br>
         <a href="/basic_info" id="Continue" class="btn-get-started scrollto">< Previous</a>
         <button type = "submit" id="Continue" class="btn-get-started scrollto" style = "margin-left: 40px; border: none;">Continue ></button>
     </div>
 </form>
+
+<script>
+    const suggestedSymptoms = [
+    'Itching', 'Skin Rash', 'Nodal Skin Eruptions',  'Continuous Sneezing', 'Shivering', 'Chills', 'Joint Pain', 'Stomach Pain',
+'Acidity', 'Ulcers On Tongue', 'Muscle Wasting', 'Vomiting', 'Burning Micturition',  'Spotting  urination', 'Fatigue', 'Weight Gain',
+'Anxiety', 'Cold Hands And Feets', 'Mood Swings', 'Weight Loss', 'Restlessness', 'Lethargy', 'Patches In Throat', 'Irregular Sugar Level',
+'Cough', 'High Fever', 'Sunken Eyes', 'Breathlessness', 'Sweating', 'Dehydration', 'Indigestion', 'Headache', 'Yellowish Skin', 
+'Dark Urine', 'Nausea', 'Loss Of Appetite', 'Pain Behind The Eyes', 'Back Pain', 'Constipation', 'Abdominal Pain', 'Diarrhoea',
+'Mild Fever', 'Yellow Urine', 'Yellowing Of Eyes', 'Acute Liver Failure', 'Fluid Overload', 'Swelling Of Stomach', 'Swelled Lymph Nodes',
+'Malaise', 'Blurred And Distorted Vision', 'Phlegm', 'Throat Irritation', 'Redness Of Eyes', 'Sinus Pressure', 'Runny Nose', 'Congestion',
+'Chest Pain', 'Weakness In Limbs', 'Fast Heart Rate', 'Pain During Bowel Movements', 'Pain In Anal Region', 'Bloody Stool',
+'Irritation In Anus', 'Neck Pain', 'Dizziness', 'Cramps', 'Bruising', 'Obesity', 'Swollen Legs', 'Swollen Blood Vessels', 
+'Puffy Face And Eyes', 'Enlarged Thyroid', 'Brittle Nails', 'Swollen Extremeties', 'Excessive Hunger', 'Extra Marital Contacts', 
+'Drying And Tingling Lips', 'Slurred Speech', 'Knee Pain', 'Hip Joint Pain', 'Muscle Weakness', 'Stiff Neck', 'Swelling Joints', 
+'Movement Stiffness', 'Spinning Movements', 'Loss Of Balance', 'Unsteadiness', 'Weakness Of One Body Side', 'Loss Of Smell', 
+'Bladder Discomfort', 'Foul Smell Of urine', 'Continuous Feel Of Urine', 'Passage Of Gases', 'Internal Itching', 'Toxic Look (typhos)', 
+'Depression', 'Irritability', 'Muscle Pain', 'Altered Sensorium', 'Red Spots Over Body', 'Belly Pain', 'Abnormal Menstruation', 
+'Dischromic  Patches', 'Watering From Eyes', 'Increased Appetite', 'Polyuria', 'Family History', 'Mucoid Sputum', 'Rusty Sputum', 
+'Lack Of Concentration', 
+'Visual Disturbances', 'Receiving Blood Transfusion', 'Receiving Unsterile Injections',  'Coma', 'Stomach Bleeding', 'Distention Of Abdomen', 'History Of Alcohol Consumption', 'Fluid Overload', 'Blood In Sputum', 'Prominent Veins On Calf', 'Palpitations', 'Painful Walking', 'Pus Filled Pimples', 'Blackheads', 'Scurring', 'Skin Peeling', 'Silver Like Dusting', 'Small Dents In Nails', 'Inflammatory Nails', 'Blister', 'Red Sore Around Nose', 'Yellow Crust Ooze'
+    ];
+  
+    const input = document.getElementById('symptomsInput');
+    const autocompleteDiv = document.getElementById('autocomplete');
+  
+    function showAutocompleteSuggestions() {
+      const filter = input.value.toLowerCase();
+      const suggestions = suggestedSymptoms.filter((symptom) =>
+        symptom.toLowerCase().includes(filter)
+      );
+  
+      autocompleteDiv.innerHTML = '';
+  
+      if (filter && suggestions.length > 0) {
+        autocompleteDiv.style.display = 'block';
+      } else {
+        autocompleteDiv.style.display = 'none';
+      }
+  
+      suggestions.forEach((suggestion) => {
+        const suggestionItem = document.createElement('div');
+        suggestionItem.textContent = suggestion;
+        suggestionItem.addEventListener('click', function () {
+          input.value = suggestion;
+          autocompleteDiv.style.display = 'none';
+        });
+        autocompleteDiv.appendChild(suggestionItem);
+      });
+    }
+  
+    input.addEventListener('input', showAutocompleteSuggestions);
+    input.addEventListener('focusout', function () {
+      setTimeout(() => {
+        autocompleteDiv.style.display = 'none';
+      }, 200);
+    });
+  </script>
+
 {% endblock content %}
 
-{% block style %}
-.image-map-area {
-    cursor: pointer;
-  }
-{% endblock style %}
+
+
+
+
 
 
 
