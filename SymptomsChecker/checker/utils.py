@@ -1,4 +1,5 @@
 import numpy as np
+import os
 import pandas as pd
 from scipy.stats import mode
 import matplotlib.pyplot as plt
@@ -9,6 +10,9 @@ from sklearn.svm import SVC
 from sklearn.naive_bayes import GaussianNB
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix
+from statistics import mode
+import warnings
+warnings.filterwarnings("ignore", category=UserWarning)
 
 class WebDoctor():
     def scoring(estimator, X, y):
@@ -76,9 +80,17 @@ class WebDoctor():
         svm_preds = final_svm_model.predict(test_X)
         nb_preds = final_nb_model.predict(test_X)
         rf_preds = final_rf_model.predict(test_X)
+        
+        all_predictions = [svm_preds, nb_preds, rf_preds]
+        final_preds = []
 
-        final_preds = [mode([i,j,k])[0][0] for i,j,
-                    k in zip(svm_preds, nb_preds, rf_preds)]
+        # Iterate over the predictions for each input data point
+        for i in range(len(svm_preds)):    
+            current_predictions = [model_preds[i] for model_preds in all_predictions]
+            mode_prediction = mode(current_predictions)
+            final_preds.append(mode_prediction)
+
+
 
 
         symptoms = X.columns.values
@@ -94,8 +106,7 @@ class WebDoctor():
             "symptom_index":symptom_index,
             "predictions_classes":encoder.classes_
         }
-        print(symptom)
-        print(symptom_index)
+
         return data_dict, final_svm_model, final_nb_model, final_rf_model
 
 
@@ -118,7 +129,7 @@ class WebDoctor():
         svm_prediction = data_dict["predictions_classes"][final_svm_model.predict(input_data)[0]]
         
         # making final prediction by taking mode of all predictions
-        final_prediction = mode([rf_prediction, nb_prediction, svm_prediction])[0][0]
+        final_prediction = mode([rf_prediction, nb_prediction, svm_prediction])
         predictions = {
             "rf_model_prediction": rf_prediction,
             "naive_bayes_prediction": nb_prediction,
