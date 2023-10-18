@@ -90,9 +90,6 @@ class WebDoctor():
             mode_prediction = mode(current_predictions)
             final_preds.append(mode_prediction)
 
-
-
-
         symptoms = X.columns.values
 
     # Creating a symptom index dictionary to encode the
@@ -111,13 +108,15 @@ class WebDoctor():
 
 
     def predictDisease(self, symptoms, data_dict, final_svm_model, final_nb_model, final_rf_model):
-        symptoms = symptoms.split(",")
-        
+        #symptoms = symptoms.split(",")
+        print(symptoms)
         # creating input data for the models
         input_data = [0] * len(data_dict["symptom_index"])
         for symptom in symptoms:
             index = data_dict["symptom_index"][symptom]
             input_data[index] = 1
+        
+        print(input_data)
             
         # reshaping the input data and converting it
         # into suitable format for model predictions

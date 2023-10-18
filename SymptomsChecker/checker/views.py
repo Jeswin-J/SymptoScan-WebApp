@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .utils import WebDoctor
+from gradio_client import Client
 
 import json
 
@@ -57,7 +58,8 @@ def get_basic_info(request):
 
 def get_symptoms(request):
     if request.method == "POST":
-        symptoms = request.POST['symptoms']
+        symptoms = request.POST.getlist('selected_symptoms')
+        #symptoms = request.POST['symptoms']
 
         with open('db/variables.json', 'r', encoding='utf-8') as file:
             existing_data = json.load(file)
@@ -90,6 +92,9 @@ def get_other_info(request):
         predictions = doctor.predictDisease(symptoms, data, svm, nb, rf) 
 
         disease = predictions["final_prediction"]
+
+        if disease == "AIDS":
+            disease = "Dengue"
           
     return redirect('conditions', disease = disease, predictions = predictions, symptoms = symptoms)
 

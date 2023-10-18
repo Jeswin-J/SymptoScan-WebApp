@@ -3,28 +3,32 @@
 {% block content %}
     <h3>What are your symptoms?</h3>
     <form method="POST" action="get_symptoms/">
-        {% csrf_token %}
-        <div style="margin-top: 30px; display: flex; justify-content: center; align-items: center; position: relative;">
-            <input
+      {% csrf_token %}
+      <div id="symptomsContainer">
+          <!-- Dynamically generated input fields will be added here -->
+      </div>
+      <div style="margin-top: 30px; display: flex; justify-content: center; align-items: center; position: relative;">
+          <input
               type="text"
-              class = "form-control"
+              class="form-control"
               name="symptoms"
               id="symptomsInput"
               placeholder="Type your main symptom here"
               style="width: 450px;"
               title=""
               autocomplete="off"
-            >
-            <div id="autocomplete" style="display: none; position: absolute; cursor: pointer; top: 100%; left: 50%; transform: translate(-50%, 0); width: 450px; max-height: 150px; overflow-y: auto; background-color: #f1f1f1; border: 1px solid #d4d4d4; border-top: none;"></div>
-          </div>
-    <div>
-        <br>
-        <a href="/basic_info" id="Continue" class="btn-get-started scrollto">< Previous</a>
-        <button type = "submit" id="Continue" class="btn-get-started scrollto" style = "margin-left: 40px; border: none;">Continue ></button>
-    </div>
-</form>
+          >
+          <div id="autocomplete" style="display: none; position: absolute; cursor: pointer; top: 100%; left: 50%; transform: translate(-50%, 0); width: 450px; max-height: 150px; overflow-y: auto; background-color: #f1f1f1; border: 1px solid #d4d4d4; border-top: none;"></div>
+      </div>
+      <div>
+          <br>
+          <a href="/basic_info" id="Continue" class="btn-get-started scrollto">< Previous</a>
+          <button type="submit" id="Continue" class="btn-get-started scrollto" style="margin-left: 40px; border: none;">Continue ></button>
+      </div>
+  </form>
 
 <script>
+    const selectedSymptoms = [];
     const suggestedSymptoms = [
     'Itching', 'Skin Rash', 'Nodal Skin Eruptions',  'Continuous Sneezing', 'Shivering', 'Chills', 'Joint Pain', 'Stomach Pain',
 'Acidity', 'Ulcers On Tongue', 'Muscle Wasting', 'Vomiting', 'Burning Micturition',  'Spotting  urination', 'Fatigue', 'Weight Gain',
@@ -47,37 +51,70 @@
   
     const input = document.getElementById('symptomsInput');
     const autocompleteDiv = document.getElementById('autocomplete');
-  
+    const symptomsContainer = document.getElementById('symptomsContainer');
+
     function showAutocompleteSuggestions() {
-      const filter = input.value.toLowerCase();
-      const suggestions = suggestedSymptoms.filter((symptom) =>
-        symptom.toLowerCase().includes(filter)
-      );
-  
-      autocompleteDiv.innerHTML = '';
-  
-      if (filter && suggestions.length > 0) {
-        autocompleteDiv.style.display = 'block';
-      } else {
-        autocompleteDiv.style.display = 'none';
-      }
-  
-      suggestions.forEach((suggestion) => {
-        const suggestionItem = document.createElement('div');
-        suggestionItem.textContent = suggestion;
-        suggestionItem.addEventListener('click', function () {
-          input.value = suggestion;
-          autocompleteDiv.style.display = 'none';
+        const filter = input.value.toLowerCase();
+        const suggestions = suggestedSymptoms.filter((symptom) =>
+            symptom.toLowerCase().includes(filter)
+        );
+
+        autocompleteDiv.innerHTML = '';
+
+        if (filter && suggestions.length > 0) {
+            autocompleteDiv.style.display = 'block';
+        } else {
+            autocompleteDiv.style.display = 'none';
+        }
+
+        // When a suggestion is selected, add it to the selectedSymptoms array
+        suggestions.forEach((suggestion) => {
+            const suggestionItem = document.createElement('div');
+            suggestionItem.textContent = suggestion;
+            suggestionItem.addEventListener('click', function () {
+                const selectedSymptom = suggestion;
+                selectedSymptoms.push(selectedSymptom);
+                updateSelectedSymptoms();
+                input.value = '';
+                autocompleteDiv.style.display = 'none';
+            });
+            autocompleteDiv.appendChild(suggestionItem);
         });
-        autocompleteDiv.appendChild(suggestionItem);
-      });
     }
-  
+
+    function updateSelectedSymptoms() {
+        symptomsContainer.innerHTML = '';
+
+        selectedSymptoms.forEach((symptom) => {
+            const symptomInput = document.createElement('input');
+            symptomInput.type = 'text';
+            symptomInput.name = 'selected_symptoms'; // Use '[]' to create a list of selected symptoms
+            symptomInput.value = symptom;
+            symptomInput.readOnly = true;
+
+            const removeButton = document.createElement('button');
+            removeButton.textContent = 'Remove';
+            removeButton.addEventListener('click', function () {
+                const index = selectedSymptoms.indexOf(symptom);
+                if (index !== -1) {
+                    selectedSymptoms.splice(index, 1);
+                    updateSelectedSymptoms();
+                }
+            });
+
+            const symptomItem = document.createElement('div');
+            symptomItem.appendChild(symptomInput);
+            symptomItem.appendChild(removeButton);
+
+            symptomsContainer.appendChild(symptomItem);
+        });
+    }
+
     input.addEventListener('input', showAutocompleteSuggestions);
     input.addEventListener('focusout', function () {
-      setTimeout(() => {
-        autocompleteDiv.style.display = 'none';
-      }, 200);
+        setTimeout(() => {
+            autocompleteDiv.style.display = 'none';
+        }, 200);
     });
   </script>
 
