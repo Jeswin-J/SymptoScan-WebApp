@@ -1,7 +1,5 @@
 from django.shortcuts import render, redirect
 from .utils import WebDoctor
-from gradio_client import Client
-
 import json
 
 doctor = WebDoctor()
@@ -93,9 +91,6 @@ def get_other_info(request):
 
         disease = predictions["final_prediction"]
 
-        if disease == "AIDS":
-            disease = "Dengue"
-          
     return redirect('conditions', disease = disease, predictions = predictions, symptoms = symptoms)
 
 

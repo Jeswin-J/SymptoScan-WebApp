@@ -11,6 +11,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix
 from statistics import mode
+import requests
 import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 
